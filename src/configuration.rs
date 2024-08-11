@@ -22,7 +22,7 @@ impl DatabaseSettings {
     }
 }
 
-pub fn get_confituration() -> Result<Settings, config::ConfigError> {
+pub fn get_configuration() -> Result<Settings, config::ConfigError> {
     // Initialize our configuration reader
     let settings = config::Config::builder()
         .add_source(config::File::new(
