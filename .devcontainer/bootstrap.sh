@@ -6,3 +6,5 @@ set -e
 
 # 3.8.2.1 sqlx-cli
 cargo install --version="~0.7" sqlx-cli --no-default-features --features rustls,postgres
+cargo install cargo-udeps --lock
+cargo install bunyan
