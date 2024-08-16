@@ -13,6 +13,11 @@ path = "src/main.rs"
 name = "zero2prod"
 
 [dependencies]
+quickcheck = "0.9.2"
+quickcheck_macros = "0.9"
+fake = "~2.3"
+validator = "0.16"
+claims = "0.7"
 unicode-segmentation = "1"
 tracing-actix-web = "0.7"
 secrecy = { version = "0.8", features = ["serde"] }
