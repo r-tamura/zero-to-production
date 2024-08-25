@@ -161,10 +161,7 @@ async fn store_token(
     Ok(())
 }
 
-#[derive(Debug)]
 pub struct StoreTokenError(sqlx::Error);
-
-impl ResponseError for StoreTokenError {}
 
 impl std::error::Error for StoreTokenError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
@@ -172,11 +169,21 @@ impl std::error::Error for StoreTokenError {
     }
 }
 
-impl std::fmt::Display for StoreTokenError {
+impl std::fmt::Debug for StoreTokenError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         error_chain_fmt(self, f)
     }
 }
+
+impl std::fmt::Display for StoreTokenError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "A database failure was encountered while trying to store a subscription token."
+        )
+    }
+}
+
 #[derive(thiserror::Error)]
 pub enum SubscribeError {
     #[error("{0}")]
