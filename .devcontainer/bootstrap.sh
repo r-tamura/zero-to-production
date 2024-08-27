@@ -10,5 +10,5 @@ sudo apt-get install -y lld clang libssl-dev postgresql-client
 cargo install --version="~0.7" sqlx-cli --no-default-features --features rustls,postgres
 
 # 4.5 Structed Logging
-cargo install cargo-udeps --lock
+cargo install cargo-udeps --locked
 cargo install bunyan
