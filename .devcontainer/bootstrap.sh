@@ -3,8 +3,8 @@
 # zero2productionの開発環境セットアップスクリプト
 
 set -e
-apt-get update
-apt-get install -y lld clang libssl-dev postgresql-client
+sudo apt-get update
+sudo apt-get install -y lld clang libssl-dev postgresql-client
 
 # 3.8.2.1 sqlx-cli
 cargo install --version="~0.7" sqlx-cli --no-default-features --features rustls,postgres
