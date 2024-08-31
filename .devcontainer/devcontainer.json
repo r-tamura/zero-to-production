@@ -1,5 +1,8 @@
 {
 	"name": "zero2prod",
 	"image": "mcr.microsoft.com/devcontainers/rust:bookworm",
+	"features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+	},
 	"postCreateCommand": "/bin/bash ./.devcontainer/bootstrap.sh"
 }
