@@ -29,7 +29,7 @@ pub struct TestApp {
 
 pub struct ConfirmationLinks {
     pub html: reqwest::Url,
-    pub plain_text: reqwest::Url,
+    pub _plain_text: reqwest::Url,
 }
 
 impl TestApp {
@@ -62,7 +62,10 @@ impl TestApp {
 
         let html = get_link(&body["HtmlBody"].as_str().unwrap());
         let plain_text = get_link(&body["TextBody"].as_str().unwrap());
-        ConfirmationLinks { html, plain_text }
+        ConfirmationLinks {
+            html,
+            _plain_text: plain_text,
+        }
     }
 }
 
