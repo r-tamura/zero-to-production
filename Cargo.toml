@@ -13,6 +13,7 @@ path = "src/main.rs"
 name = "zero2prod"
 
 [dependencies]
+base64 = "0.22"
 anyhow = "1"
 thiserror = "1"
 quickcheck = "0.9.2"
@@ -39,6 +40,7 @@ config = "0.13"
 uuid = { version = "1", features = ["v4"] }
 chrono = { version = "0.4.22", default-features = false, features = ["clock"] }
 rand = { version = "0.8", features = ["std_rng"] }
+sha3 = "0.10.8"
 
 
 [dependencies.sqlx]
