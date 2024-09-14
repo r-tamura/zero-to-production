@@ -1,4 +1,5 @@
-use actix_web::{web, HttpResponse, ResponseError};
+use actix_web::{cookie::Cookie, error::InternalError, web, HttpResponse, ResponseError};
+use actix_web_flash_messages::FlashMessage;
 use reqwest::{header::LOCATION, StatusCode};
 use secrecy::Secret;
 use sqlx::PgPool;
@@ -14,10 +15,11 @@ pub struct FormData {
     password: Secret<String>,
 }
 
+#[tracing::instrument(skip(form, pool))]
 pub async fn login(
     form: web::Form<FormData>,
     pool: web::Data<PgPool>,
-) -> Result<HttpResponse, LoginError> {
+) -> Result<HttpResponse, InternalError<LoginError>> {
     let credentials = Credentials {
         username: form.0.username,
         password: form.0.password,
@@ -25,17 +27,25 @@ pub async fn login(
 
     tracing::Span::current().record("username", &tracing::field::display(&credentials.username));
 
-    let user_id = validate_credentials(credentials, &pool)
-        .await
-        .map_err(|e| match e {
-            AuthError::InvalidCredentials(_) => LoginError::AuthError(e.into()),
-            AuthError::UnexpectedError(_) => LoginError::UnexpectedError(e.into()),
-        })?;
-
-    tracing::Span::current().record("user_id", &tracing::field::display(&user_id));
-    Ok(HttpResponse::SeeOther()
-        .insert_header((LOCATION, "/"))
-        .finish())
+    match validate_credentials(credentials, &pool).await {
+        Ok(user_id) => {
+            tracing::Span::current().record("user_id", &tracing::field::display(&user_id));
+            Ok(HttpResponse::SeeOther()
+                .insert_header((LOCATION, "/"))
+                .finish())
+        }
+        Err(e) => {
+            let e = match e {
+                AuthError::InvalidCredentials(_) => LoginError::AuthError(e.into()),
+                AuthError::UnexpectedError(_) => LoginError::UnexpectedError(e.into()),
+            };
+            FlashMessage::error(e.to_string()).send();
+            let response = HttpResponse::SeeOther()
+                .insert_header((LOCATION, "/login"))
+                .finish();
+            Err(InternalError::from_response(e, response))
+        }
+    }
 }
 
 #[derive(thiserror::Error)]
