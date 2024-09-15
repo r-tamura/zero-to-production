@@ -37,11 +37,13 @@ tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 # unnecessary dependencies for projects that do not need it.
 serde = { version = "1", features = ["derive"] }
 config = "0.13"
-uuid = { version = "1", features = ["v4"] }
+uuid = { version = "1", features = ["serde", "v4"] }
 chrono = { version = "0.4.22", default-features = false, features = ["clock"] }
 rand = { version = "0.8", features = ["std_rng"] }
 argon2 = { version = "0.5.3", features = ["std"] }
 actix-web-flash-messages = { version = "0.5.0", features = ["cookies"] }
+actix-session = { version = "0.10.1", features = ["redis-session-native-tls"] }
+serde_json = "1"
 
 
 [dependencies.sqlx]
